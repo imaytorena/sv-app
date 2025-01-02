@@ -9,7 +9,7 @@
 
 <ParaglideJS {i18n}>
 	<div class="app">
-<!--		<Header></Header>-->
+		<Header/>
 
 		<main>
 			{@render children()}

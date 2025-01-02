@@ -1,107 +1,65 @@
 <script lang="ts">
-	// import { spring } from 'svelte/motion';
+	let { count = 0 } = $props();
+	let arrayCount = $derived(String(count).padStart(5, '0').split('').map(c => parseInt(c)));
+	$effect(() => {
+		if (count <= 0) {
+			count = 0;
+		}
+	});
 
-	let count = $state(2934);
+	let decrease = async () => {
+		try {
+			const response = await fetch('/api/action', {
+				method: 'POST',
+				body: JSON.stringify({ id: 0, count }),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+			const data = await response.json();
+			count = parseInt(data.count);
+		} catch (e) {
+			console.error(e);
+		}
+	};
+	let increase = async () => {
+		try {
+			const response = await fetch('/api/action', {
+				method: 'POST',
+				body: JSON.stringify({ id: 1, count }),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+			const data = await response.json();
+			count = parseInt(data.count);
+		} catch (e) {
+			console.error(e);
+		}
+	};
 
-	// // svelte-ignore state_referenced_locally
-	// const displayedCount = spring(count);
-	//
-	// $effect(() => {
-	// 	displayedCount.set(count);
-	// });
-	// let offset = $derived(modulo($displayedCount, 1));
-
-	function modulo(n: number, m: number) {
-		// handle negative numbers
-		return ((n % m) + m) % m;
-	}
 </script>
 
-<div class="flex gap-1.5">
-
-	{#each String(count).padStart(10, "0") as c}
-		<div class="counter">
-			<div class="counter-viewport">
-		<!--		<div class="counter-digits" style="transform: translate(0, {100 * offset}%)">-->
-		<!--			<strong class="hidden" aria-hidden="true">{Math.floor($displayedCount + 1)}</strong>-->
-					<strong>{Math.floor(c)}</strong>
-		<!--		</div>-->
+<div class="counter flex gap-1.5">
+	{#each arrayCount as c}
+		<div class="counter-viewport">
+			<div class="counter-number flex flex-col">
+				<!--				<strong class="hidden" aria-hidden="true">{c > 0 ? Math.floor(c - 1) % 10 : 0}</strong>-->
+				<strong>{Math.floor(c)}</strong>
+				<!--				<strong class="hidden" aria-hidden="true">{Math.floor(c + 1) % 10}</strong>-->
 			</div>
 		</div>
 	{/each}
 </div>
 
-<div class="action-buttons flex justify-center w-1/2">
-	<button onclick={() => (count -= 1)} aria-label="Decrease the counter by one">
-		<svg aria-hidden="true" viewBox="0 0 1 1">
-			<path d="M0,0.5 L1,0.5" />
-		</svg>
-	</button>
-
-	<button onclick={() => (count += 1)} aria-label="Increase the counter by one">
-		<svg aria-hidden="true" viewBox="0 0 1 1">
-			<path d="M0,0.5 L1,0.5 M0.5,0 L0.5,1" />
-		</svg>
-	</button>
+<div class="flex gap-5 text-2xl font-bold text-teal-300">
+	<button class="hover:text-teal-200" onclick={decrease} aria-label="Decrease the counter by one">-</button>
+	<button class="hover:text-teal-200" onclick={increase} aria-label="Increase the counter by one">+</button>
 </div>
 
 <style>
-		.action-buttons button {
-				@apply flex items-center justify-center
-		}
-	.counter {
-		display: flex;
-		border-top: 1px solid rgba(0, 0, 0, 0.1);
-		border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-		/*margin: 1rem 0;*/
-		@apply p-1.5 border-white border-opacity-5 border-solid border-4 rounded-xl
-	}
-
-	.counter button {
-		width: 2em;
-		padding: 0;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		border: 0;
-		background-color: transparent;
-		touch-action: manipulation;
-		font-size: 2rem;
-	}
-
-	.counter button:hover {
-		background-color: var(--color-bg-1);
-	}
-
-	svg {
-		width: 25%;
-		height: 25%;
-	}
-
-	path {
-		vector-effect: non-scaling-stroke;
-		stroke-width: 2px;
-		stroke: #444;
-	}
-
-	.counter-viewport {
-		width: 3em;
-		height: 4em;
-		overflow: hidden;
-		text-align: center;
-		position: relative;
-	}
-
-	.counter-viewport strong {
-		position: absolute;
-		display: flex;
-		width: 100%;
-		height: 100%;
-		font-weight: 400;
-		color: var(--color-theme-1);
-		font-size: 4rem;
-		align-items: center;
-		justify-content: center;
-
-	}
+    .counter {
+        font-weight: 300;
+        font-size: 5em;
+    }
 </style>
