@@ -5,7 +5,8 @@ export async function POST({ request, platform }) {
 	try {
 		const { id } = await request.json();
 		const kv: KVNamespace<string> | undefined = platform?.env?.KV_NAMESPACE ?? undefined;
-		console.log(kv);
+		if(!kv) { throw new Error('KV_NOT_FOUND'); }
+
 		const kvCount = await kv?.get('count') ?? "0";
 		const count = parseInt(kvCount);
 
