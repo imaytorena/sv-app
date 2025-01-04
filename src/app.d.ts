@@ -4,7 +4,7 @@ declare global {
 	namespace App {
 		interface Platform {
 			env?: {
-				KV_NAMESPACE: KVNamespace;
+				COUNTER: KVNamespace;
 			};
 		}
 	}
