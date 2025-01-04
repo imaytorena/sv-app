@@ -1,30 +1,22 @@
 import { json } from '@sveltejs/kit';
-import { createClient } from 'redis';
-import { REDIS_PUBLIC_URL } from '$env/static/private';
+import type { KVNamespace } from '@cloudflare/workers-types';
 
-export async function POST({ request }) {
+export async function POST({ request, platform }) {
 	try {
 		const { id } = await request.json();
-
-		// ==== REDIS CONNECTION ===============
-		const client = createClient({ url: REDIS_PUBLIC_URL });
-		client.on('error', (err) => console.error('Redis Error', err));
-		await client.connect();
-
-		let redisCount = (await client.get('count')) ?? '0';
-		const count = parseInt(redisCount);
+		const kv: KVNamespace<string> | undefined = platform?.env?.KV_NAMESPACE ?? undefined;
+		console.log(kv);
+		const kvCount = await kv?.get('count') ?? "0";
+		const count = parseInt(kvCount);
 
 		if (id === 0) {
 			if (count > 0) {
-				// ==== REDIS VALUE DECREASING =====
-				await client.decr('count');
+				await kv?.put('count', String(count-1));
 			}
 		} else {
-			// ==== REDIS VALUE INCREMENTATION =====
-			await client.incr('count');
+			await kv?.put('count', String(count+1));
 		}
-		// ==== REDIS GET CURRENT COUNT ========
-		const currentCount = (await client.get('count')) ?? '0';
+		const currentCount = await kv?.get('count') ?? "0";
 
 		return json({ count: parseInt(currentCount) }, { status: 201 });
 	} catch (err) {
