@@ -4,20 +4,22 @@ import type { KVNamespace } from '@cloudflare/workers-types';
 export async function POST({ request, platform }) {
 	try {
 		const { id } = await request.json();
-		const kv: KVNamespace<string> | undefined = platform?.env?.KV_NAMESPACE ?? undefined;
-		if(!kv) { throw new Error('KV_NOT_FOUND'); }
+		const kv: KVNamespace | undefined = platform?.env?.COUNTER ?? undefined;
+		if (!kv) {
+			throw new Error('KV_NOT_FOUND');
+		}
 
-		const kvCount = await kv?.get('count') ?? "0";
+		const kvCount = (await kv?.get('count')) ?? '0';
 		const count = parseInt(kvCount);
 
 		if (id === 0) {
 			if (count > 0) {
-				await kv?.put('count', String(count-1));
+				await kv?.put('count', String(count - 1));
 			}
 		} else {
-			await kv?.put('count', String(count+1));
+			await kv?.put('count', String(count + 1));
 		}
-		const currentCount = await kv?.get('count') ?? "0";
+		const currentCount = (await kv?.get('count')) ?? '0';
 
 		return json({ count: parseInt(currentCount) }, { status: 201 });
 	} catch (err) {
