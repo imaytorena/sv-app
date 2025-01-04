@@ -1,5 +1,4 @@
 name = "sv-app"
-account_id = "8cccd0b31e0328a6e9a3e263f8dfa253"
 
 pages_build_output_dir = ".svelte-kit/cloudflare"
 
@@ -10,5 +9,3 @@ kv_namespaces = [
 
 compatibility_flags = [ "nodejs_compat" ]
 compatibility_date = "2025-01-03"
-
-workers_dev = true
