@@ -1,6 +1,8 @@
 import { json } from '@sveltejs/kit';
 import type { KVNamespace } from '@cloudflare/workers-types';
 
+const LIMIT = 50;
+
 export async function GET({ platform }) {
 	try {
 		const kvCount = (await platform?.env?.COUNTER.get('count')) ?? '0';
@@ -21,6 +23,10 @@ export async function POST({ request, platform }) {
 
 		const kvCount = (await kv?.get('count')) ?? '0';
 		const count = parseInt(kvCount);
+		if (LIMIT <= count)  return json({
+			count: count,
+			message: 'WHY ARE U TRYING TO REACH THIS ENDPOINT BRO????'
+		}, { status: 404 }) ;
 
 		if (id === 0) {
 			if (count > 0) {

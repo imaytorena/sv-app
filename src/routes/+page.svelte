@@ -1,7 +1,9 @@
 <script lang="ts">
 	import Counter from './Counter.svelte';
 
-	type PageData = { count: number };
+	const COUNT_LIMITER_FALLBACK = 10;
+
+	type PageData = { count: number, limit?: number };
 	let { data }: { data: PageData } = $props();
 </script>
 
@@ -10,9 +12,12 @@
 	<meta name="description" content="aplicación para sumar un numero en redis" />
 </svelte:head>
 
-<section>
-	<!--{data.count}-->
-	<Counter count={data.count ?? 0} />
+<section class="flex flex-col">
+	<p class=" text-white font-mono text-lg">
+		low-latency counter saved on <a class="italic" href="https://developers.cloudflare.com/kv/"
+																		title="Cloudflare KV documentation" target="_blank">CF-KV</a>
+	</p>
+	<Counter count={data.count ?? 0} limit={data.limit ?? COUNT_LIMITER_FALLBACK} />
 </section>
 
 <style>
