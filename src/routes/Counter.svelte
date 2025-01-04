@@ -52,9 +52,9 @@
 	{/each}
 </div>
 
-<div class="flex gap-5 text-2xl font-bold text-teal-300">
-	<button class="hover:text-teal-200" onclick={decrease} aria-label="Decrease the counter by one">-</button>
-	<button class="hover:text-teal-200" onclick={increase} aria-label="Increase the counter by one">+</button>
+<div class="flex gap-5 text-2xl font-bold text-[#E35D4F]">
+	<button onclick={decrease} aria-label="Decrease the counter by one">-</button>
+	<button onclick={increase} aria-label="Increase the counter by one">+</button>
 </div>
 
 <style>
