@@ -6,8 +6,8 @@
 </script>
 
 <svelte:head>
-	<title>Home</title>
-	<meta name="description" content="Svelte demo app" />
+	<title>sv-app</title>
+	<meta name="description" content="aplicación para sumar un numero en redis" />
 </svelte:head>
 
 <section>
