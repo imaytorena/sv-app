@@ -30,6 +30,7 @@ export async function POST({ request }) {
 
 		return json({ count: parseInt(currentCount) }, { status: 201 });
 	} catch (error) {
+		// TEST
 		console.log(error);
 	}
 }
