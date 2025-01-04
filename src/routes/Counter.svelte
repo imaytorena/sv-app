@@ -32,9 +32,11 @@
 				}
 			});
 			const data = await response.json();
+			if (data.error) throw Error(data.error);
+
 			count = parseInt(data.count);
 		} catch (e) {
-			console.error(e);
+			count = 0;
 		}
 	};
 
