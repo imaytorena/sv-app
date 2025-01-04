@@ -1,6 +1,16 @@
 import { json } from '@sveltejs/kit';
 import type { KVNamespace } from '@cloudflare/workers-types';
 
+export async function GET({ platform }) {
+	try {
+		const kvCount = (await platform?.env?.COUNTER.get('count')) ?? '0';
+		return json({ count: parseInt(kvCount) }, { status: 201 });
+	} catch (err) {
+		// @ts-ignore
+		return json({ count: 0, error: err?.message }, { status: 400 });
+	}
+}
+
 export async function POST({ request, platform }) {
 	try {
 		const { id } = await request.json();
