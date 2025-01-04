@@ -1,13 +1,34 @@
 import { json } from '@sveltejs/kit';
-import axios from 'axios';
+import { createClient } from 'redis';
+import { REDIS_PUBLIC_URL } from '$env/static/private';
+
 
 export async function POST({ request }) {
 	try {
-		const { id, count } = await request.json();
-		const data = { results: []}
-		const currentCount = id == 0 ? count - 1 : count + 1;
+		const { id } = await request.json();
 
-		return json({ count: currentCount, data_mockup: data.results }, { status: 201 });
+		// ==== REDIS CONNECTION ===============
+		const client = createClient({ url: REDIS_PUBLIC_URL });
+		client.on('error', err => console.error('Redis Error', err));
+		await client.connect();
+
+		let redisCount = await client.get('count') ?? "0";
+		const count = parseInt(redisCount);
+
+		if (id === 0) {
+			if (count > 0) {
+				// ==== REDIS VALUE DECREASING =====
+				await client.decr('count');
+			}
+		} else {
+			// ==== REDIS VALUE INCREMENTATION =====
+			await client.incr('count');
+		}
+
+		// ==== REDIS GET CURRENT COUNT ========
+		const currentCount = await client.get('count') ?? "0";
+
+		return json({ count: parseInt(currentCount) }, { status: 201 });
 	} catch (error) {
 		console.log(error);
 	}
