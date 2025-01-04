@@ -8,8 +8,8 @@
 </script>
 
 <svelte:head>
-	<title>sv-app</title>
-	<meta name="description" content="aplicación para sumar un numero en redis" />
+	<title>count to 50</title>
+	<meta name="description" content="counter but doesn't strike" />
 </svelte:head>
 
 <section class="flex flex-col">
