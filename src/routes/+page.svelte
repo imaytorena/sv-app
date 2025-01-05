@@ -13,7 +13,7 @@
 </svelte:head>
 
 <section class="flex flex-col">
-	<p class=" text-white font-mono text-lg">
+	<p class=" text-white font-mono text-lg text-center mx-2">
 		low-latency counter saved on <a class="italic" href="https://developers.cloudflare.com/kv/"
 																		title="Cloudflare KV documentation" target="_blank">CF-KV</a>
 	</p>

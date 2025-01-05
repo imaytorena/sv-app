@@ -25,6 +25,9 @@ body {
 	background-attachment: fixed;
 	background-color: var(--color-bg-1);
 	background-size: 100vw 100vh;
+	background-image: radial-gradient(gray 1px, transparent 0);
+	background-size: 6em 6em;
+	background-position: -19px -19px;
 }
 
 h1,
